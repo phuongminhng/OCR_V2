@@ -1,0 +1,390 @@
+
+
+<!------ Include the above in your HEAD tag ---------->
+{% extends "bootstrap/base.html" %}
+
+{% block styles %}
+{{super()}}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link rel=¨stylesheet¨ href="{{url_for('.static', filename='assets/index.css')}}">
+{% endblock %}
+
+{% block scripts %}
+<script class="jsbin" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="{{url_for('.static', filename='assets/myscripts.js')}}"></script>
+{{super()}}
+{% endblock %}
+
+
+{% block content %}
+<div class="page-header" align="center">
+    <h1>GPKD <small>Nguyễn Phương Minh BaseVersion</small></h1>
+</div>
+
+    <br>
+    
+    <form style="margin-left: 0.75em;" action="/" method="POST" enctype="multipart/form-data">
+        <p>
+        <!-- <div class="panel panel-default">
+            <div class="panel-heading" align="center">
+                <h2 class="panel-title">Lựa chọn thông tin cần hiển thị:</h2>
+            </div>
+            <div class="panel-body" align="center">
+                <div class="row">
+                    <div class="col-lg-6">
+                    <div class="input-group">
+                        <h5>
+                            <input type="checkbox" name="documenType" value="true"> Loại giấy tờ</input>
+                            <input type="checkbox" name="busNumber" value="true"> Mã số doanh nghiệp</input>
+                            <input type="checkbox" name="dateRegister" value="true"> Ngày đăng ký</input>
+                            <input type="checkbox" name="nameCompany" value="true"> Tên công ty</input>
+                            <input type="checkbox" name="addressCompany" value="true"> Địa chỉ công ty</input>
+                            <input type="checkbox" name="phoneNumberCompany" value="true"> Số điện thoại</input>
+                            <input type="checkbox" name="emailCompany" value="true"> Email công ty</input>
+                        </h5>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+
+        <div class="panel panel-default">
+            <div class="panel-heading" align="center">
+                <h2 class="panel-title">Lựa chọn mô hình detect:</h2>
+            </div>
+            <div class="panel-body" align="center">
+                <div class="row">
+                    <div class="col-lg-6">
+                    <div class="input-group">
+                        <h5>
+                            <input type="checkbox" name="toolBoxWithOcr" value="true"> ToolBox with OCR </input>
+                            <input type="checkbox" name="toolBoxWithTesseract" value="true"> ToolBox with Tesseract </input>
+                            <input type="checkbox" name="easyOcr" value="true"> EasyOcr</input>
+                        </h5>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div align="center">
+        <h2>Input Image:</h2>
+        <div class="d-flex justify-content-center">
+            <div class="mb-3">
+                <input  type="file" name="file">
+            </div>
+            <div>
+                <input type="submit" value="Upload" class="btn btn-success">
+            </div>
+        
+          </div>
+        </div>
+        </p>
+    </div>
+        <div class="container text-center">
+            
+            <div class="row">
+            <div class="col-4">
+                <div class="media-middle">
+                    {% if user_image %}
+                        
+                        <img src="{{ url_for('static', filename=user_image) }}" alt="User Image" class="img-thumbnail">
+                    {% endif %}
+                </div>
+                {% if msg %}
+                <h5>{{ msg }}</h5>
+                {% endif %}
+            </div>
+              <!-- <div class="col-8">
+                <div class="row">
+                    <div class="col">
+                        {% if time %}
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Thời gian xử lý: </span>
+                                </div>
+                                <div>
+                                <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ time }} </b> seconds </h5></p></span>
+                                </div>
+                            
+                              </div>
+                        {% endif %}
+        
+                        {% if documenTypeBoolean %}
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Loại giấy tờ: </span>
+                                 
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p> <h5><b> {{ documenType }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                        {% endif %}
+        
+                        {% if busNumberBoolean %}
+                            
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Mã số doanh nghiệp: </span>
+                                  
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ busNumber }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                        {% endif %}
+
+                        {% if dateRegisterBoolean %}
+                            
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Đăng ký lần đầu: </span>
+                                  
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ dateRegister }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                        {% endif %}
+        
+                        {% if nameCompanyBoolean %}
+                            
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Tên công ty: </span>
+                                  
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ nameCompany }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                        {% endif %}
+        
+                        {% if addressCompanyBoolean %}
+                            
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Địa chỉ công ty: </span>
+                                  
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p> <h5><b> {{ addressCompany }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                        {% endif %}
+        
+                        {% if phoneNumberCompanyBoolean %}
+                            
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Số điện thoại công ty: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ phoneNumberCompany }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                        {% endif %}
+        
+                        {% if emailCompanyBoolean %}
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Email công ty: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ emailCompany }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                        {% endif %}
+                    </div>
+                </div>
+              </div>
+            </div> -->
+            <div class="col-8">
+                <div class="row">
+                    <div class="col">
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Thời gian xử lý: </span>
+                                </div>
+                                <div>
+                                <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ time }} </b> seconds </h5></p></span>
+                                </div>
+                            </div>
+                            <h3> Thông tin doanh nghiệp</h3>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Loại giấy tờ: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p> <h5><b> {{ documenType }} </b></h5></p></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Mã số doanh nghiệp: </span>
+                                  
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ busNumber }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                            
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Đăng ký lần đầu: </span>
+                                  
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ dateRegister }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Tên công ty: </span>
+                                  
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ nameCompany }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Địa chỉ công ty: </span>
+                                  
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p> <h5><b> {{ addressCompany }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Số điện thoại công ty: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ phoneNumberCompany }} </b></h5></p></span>
+                                    </div>
+                              </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Email công ty: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ emailCompany }} </b></h5></p></span>
+                                </div>
+                            </div>
+
+
+
+                            <h3>Thông tin người đại diện</h3>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Họ và tên: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ nameRep }} </b></h5></p></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Giới tính: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ sexRep }} </b></h5></p></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Ngày sinh: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ birthRep }} </b></h5></p></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Loại giấy tờ: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ documentTypeRep }} </b></h5></p></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Số giấy tờ: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ documentNumberRep }} </b></h5></p></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Ngày cấp: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ documentDateRep }} </b></h5></p></span>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                  <span class="text" id="basic-addon3">Nơi cấp: </span>
+                                </div>
+                                <div>
+                                    <span class="input-group-text" id="basic-addon3"><p><h5><b> {{ addressRep }} </b></h5></p></span>
+                                </div>
+                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </form>
+
+{% endblock %}
