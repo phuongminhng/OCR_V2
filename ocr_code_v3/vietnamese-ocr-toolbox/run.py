@@ -88,34 +88,66 @@ class Pipeline:
 
     def startTesseract(self, img):
         # Document extraction
+        # img1 = self.preproc(img)
+
+        # if self.debug:
+        #     saved_img = cv2.cvtColor(img1, cv2.COLOR_RGB2BGR)
+        #     cv2.imwrite(self.preprocess_cache, saved_img)
+
+        #     boxes, img2  = self.det_model(
+        #         img1,
+        #         crop_region=True,
+        #         return_result=True,
+        #         output_path=self.cache_folder)
+        #     saved_img = cv2.cvtColor(img2, cv2.COLOR_RGB2BGR)
+        #     cv2.imwrite(self.detection_cache, saved_img)
+        # else:
+        #     boxes = self.det_model(
+        #         img1,
+        #         crop_region=True,
+        #         return_result=False,
+        #         output_path=self.cache_folder)
+
+        # img_paths=os.listdir(self.crop_cache)
+        # img_paths.sort(key=natural_keys)
+        # img_paths = [os.path.join(self.crop_cache, i) for i in img_paths]
+        # # print(img_paths)
+        # c=[]
+        # for a in img_paths:
+            # c.append(pytesseract.image_to_string(a, config='-l vie --oem 1 --psm 6'))
+        return pytesseract.image_to_string(a, config='-l vie --oem 1 --psm 6')
+
+    def getBox(self, img):
         img1 = self.preproc(img)
-
-        if self.debug:
-            saved_img = cv2.cvtColor(img1, cv2.COLOR_RGB2BGR)
-            cv2.imwrite(self.preprocess_cache, saved_img)
-
-            boxes, img2  = self.det_model(
-                img1,
-                crop_region=True,
-                return_result=True,
-                output_path=self.cache_folder)
-            saved_img = cv2.cvtColor(img2, cv2.COLOR_RGB2BGR)
-            cv2.imwrite(self.detection_cache, saved_img)
-        else:
-            boxes = self.det_model(
-                img1,
-                crop_region=True,
-                return_result=False,
-                output_path=self.cache_folder)
-
+        boxes = self.det_model(
+            img1,
+            crop_region=True,
+            return_result=False,
+            output_path=self.cache_folder)
         img_paths=os.listdir(self.crop_cache)
         img_paths.sort(key=natural_keys)
-        img_paths = [os.path.join(self.crop_cache, i) for i in img_paths]
-        # print(img_paths)
-        c=[]
-        for a in img_paths:
-            c.append(pytesseract.image_to_string(a, config='-l vie --oem 1 --psm 6'))
-        return c
+        img_paths = [os.path.join(self.crop_cache, i) for i in img_paths]    
+        texts = self.ocr_model.predict_folder(img_paths, return_probs=False)
+        texts = self.correction(texts, return_score=False)
+        print(self.do_retrieve)
+        if self.do_retrieve:
+            preds, probs = self.retrieval(texts)
+        else:
+            preds, probs = None, None
+
+        visualize(
+          img1, boxes, texts, 
+          img_name = self.final_output, 
+          class_mapping = self.class_mapping,
+          labels = preds, probs = probs, 
+          visualize_best=self.do_retrieve)
+
+        if self.do_retrieve:
+            best_score_idx = find_highest_score_each_class(preds, probs, self.class_mapping)
+            with open(self.retr_output, 'w') as f:
+                for cls, idx in enumerate(best_score_idx):
+                    f.write(f"{self.idx_mapping[cls]} : {texts[idx]}\n")
+
 
 
     def startVietOcr(self, img):

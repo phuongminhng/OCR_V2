@@ -357,11 +357,6 @@ def home_page():
              time=end - start, dateRegister=dateRegister,phoneNumberCompany=phoneNumberCompany, emailCompany=emailCompany,
              nameRep=nameRep, sexRep=sexRep,documentTypeRep=documentTypeRep, documentNumberRep=documentNumberRep,birthRep=birthRep,
              documentDateRep=documentDateRep, addressRep=addressRep)
-
-
-
-
-
             # return render_template("web.html", user_image=image.filename, msg="Tải lên thành công",
             #  documenTypeBoolean=documenTypeBoolean, busNumberBoolean=busNumberBoolean,
             #  nameCompanyBoolean=nameCompanyBoolean, 
